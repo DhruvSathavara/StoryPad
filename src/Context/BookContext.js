@@ -1,5 +1,5 @@
 
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 import axios from 'axios'
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import { Web3Storage } from "web3.storage/dist/bundle.esm.min";
@@ -16,35 +16,15 @@ export const BookContextProvider = (props) => {
     const [pdf, setPdf] = useState('');
 
     const { Moralis, user, account } = useMoralis();
-    const { data, fetch } = useMoralisQuery("UntouchedArchieve");
+    const { data, fetch } = useMoralisQuery("Storylab");
+    // console.log(data, ' ====');
     const [NewData, setData] = useState([]);
     const [bookDetails, setBookDetails] = useState({})
-    const API_Token =  process.env.REACT_APP_WEB3STORAGE_TOKEN;
-    const client = new Web3Storage({ token: API_Token })
-    const untouchedA = Moralis.Object.extend("UntouchedArchieve");
-    const UntoucheDdata = new untouchedA();
+    const API_Token = process.env.REACT_APP_WEB3STORAGE_TOKEN;
+     const client = new Web3Storage({ token: API_Token })
+    const Storypad = Moralis.Object.extend("Storylab");
+    const StoryPad = new Storypad();
     const { authenticate, isAuthenticated, isInitialized } = useMoralis()
-
-
-
-
-    const login = async () => {
-        console.log('called login');
-        if (!isAuthenticated) {
-            await authenticate({
-                provider: "web3Auth",
-                clientId: "BHQlt53J8Q_CprFI9tgx5aRB7pE9Ei0ccchzXQBNIYAI4RwdZ84Y2sVGoezEZ3S_kwwt3MuZ2eZIGoTYET--4I0",
-            })
-                .then(function (user) {
-                    let address = user.get("ethAddress")
-                    console.log(address,'address in context');
-                    localStorage.setItem("currentUserAddress",address)
-                })
-                .catch(function (error) {
-                });
-
-        }
-    }
 
 
     function addData(Item) {
@@ -55,40 +35,52 @@ export const BookContextProvider = (props) => {
             { type: "application/json" }
         );
         const files = [
-            new File([blob], "data.json"),
+            new File([blob], "story.json"),
         ];
+        console.log('files==>', files);
         return files;
 
     }
+
+
     async function storeFiles(Item) {
-        var array = [];
 
-        // TO GET CURRENT USER WALLET ADDRESS
-        let currentUser = login()
-        const Cuser = Moralis.User.current(currentUser)
-        UntoucheDdata.set("Current_User", user)
-
-
-        let files = addData(Item)
+        StoryPad.set('Currunt_user', user);
+        let files = addData(Item);
         const cid = await client.put(files);
-        UntoucheDdata.set("CID", cid);
-        UntoucheDdata.save();
-        axios.get(`https://${cid}.ipfs.infura-ipfs.io/data.json`)
-            .then(function (response) {
-                array.push(response.data);
-                setData(array);
-            })
-            .catch(function (error) {
-            })
+        StoryPad.set("CID", cid);
+        StoryPad.save();
+
+        console.log("files with cid ==>", ` https://dweb.link/ipfs/${cid}/story.json`);
 
         return cid;
     }
+
+    const login = async () => {
+        console.log('called login');
+        if (!isAuthenticated) {
+            await authenticate({
+                provider: "web3Auth",
+                clientId: "BHQlt53J8Q_CprFI9tgx5aRB7pE9Ei0ccchzXQBNIYAI4RwdZ84Y2sVGoezEZ3S_kwwt3MuZ2eZIGoTYET--4I0",
+            })
+                .then(function (user) {
+                    let address = user.get("ethAddress")
+                    console.log(address, 'address in context');
+                    localStorage.setItem("currentUserAddress", address)
+                })
+                .catch(function (error) {
+                });
+
+        }
+    }
+
+
 
 
     async function getBookDetails(params) {
 
         if (isAuthenticated) {
-            const archives = Moralis.Object.extend("UntouchedArchieve");
+            const archives = Moralis.Object.extend("Storylab");
             const query = new Moralis.Query(archives);
             query.equalTo("objectId", (params.id).toString());
             const object = await query.first();
@@ -104,41 +96,22 @@ export const BookContextProvider = (props) => {
 
     // ------------MAHIMA'CODE
 
-async function storeFile(file) {
-       const ext = file.name.split('.').pop();
+    async function storeFile(file) {
+        const ext = file.name.split('.').pop();
 
-     const fileName = `${uuidv4()}.${ext}`;
-     const newFile = new File([file], fileName, {type: file.type});
-     const cid = await client.put([newFile], {
-         name: fileName,
-     });
-     const imageURI = `https://${cid}.ipfs.dweb.link/${fileName}`;
-     setImage(imageURI);
-    //  const blob = new Blob([JSON.stringify({file:imageURI})], { type: "application/json" });
-    //  const files = [new File([blob], "file.json")];
-    //  setImage(imageURI)
-     return imageURI;
-}
+        const fileName = `${uuidv4()}.${ext}`;
+        const newFile = new File([file], fileName, { type: file.type });
+        const cid = await client.put([newFile], {
+            name: fileName,
+        });
+        const imageURI = `https://${cid}.ipfs.dweb.link/${fileName}`;
+        setImage(imageURI);
 
+        return imageURI;
+    }
 
+ 
 
-async function storePdfFile(file){
-    const ext = file.name.split('.').pop();
-  
-  const fileName = `${uuidv4()}.${ext}`;
-  const newFile = new File([file], fileName, {type: file.type});
-  const cid = await client.put([newFile], {
-    name: fileName,
-  });
-  const pdfURI = `https://${cid}.ipfs.dweb.link/${fileName}`;
-//   const blob = new Blob([JSON.stringify({file : pdfURI})], { type: "application/json" });
-//   const files = [new File([blob], "pdf.json")];
-  setPdf(pdfURI)
-  
-  return pdfURI;
-  
-   }
-   
     return (
         <BookContext.Provider
             value={{
@@ -150,11 +123,10 @@ async function storePdfFile(file){
                 login,
                 storeFile,
                 Image,
-                storePdfFile,
-                pdf,
+                fetch
+                 
                 
-                // currentUser
-                // fetch
+
             }}
         >
             {props.children}
