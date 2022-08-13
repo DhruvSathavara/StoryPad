@@ -19,7 +19,7 @@ export const BookContextProvider = (props) => {
     const { data, fetch } = useMoralisQuery("UntouchedArchieve");
     const [NewData, setData] = useState([]);
     const [bookDetails, setBookDetails] = useState({})
-    const API_Token =  process.env.REACT_APP_WEB3STORAGE_TOKEN;
+    const API_Token = process.env.REACT_APP_WEB3STORAGE_TOKEN;
     const client = new Web3Storage({ token: API_Token })
     const untouchedA = Moralis.Object.extend("UntouchedArchieve");
     const UntoucheDdata = new untouchedA();
@@ -30,6 +30,7 @@ export const BookContextProvider = (props) => {
 
     const login = async () => {
         console.log('called login');
+        console.log(localStorage.getItem("currentUserAddress"))
         if (!isAuthenticated) {
             await authenticate({
                 provider: "web3Auth",
@@ -37,12 +38,10 @@ export const BookContextProvider = (props) => {
             })
                 .then(function (user) {
                     let address = user.get("ethAddress")
-                    console.log(address,'address in context');
-                    localStorage.setItem("currentUserAddress",address)
+                    console.log(address, 'address in context');
                 })
                 .catch(function (error) {
                 });
-
         }
     }
 
@@ -64,9 +63,9 @@ export const BookContextProvider = (props) => {
         var array = [];
 
         // TO GET CURRENT USER WALLET ADDRESS
-        let currentUser = login()
-        const Cuser = Moralis.User.current(currentUser)
-        UntoucheDdata.set("Current_User", user)
+        // let currentUser = login()
+        // const Cuser = Moralis.User.current(currentUser)
+        // UntoucheDdata.set("Current_User", user)
 
 
         let files = addData(Item)
@@ -104,41 +103,41 @@ export const BookContextProvider = (props) => {
 
     // ------------MAHIMA'CODE
 
-async function storeFile(file) {
-       const ext = file.name.split('.').pop();
+    async function storeFile(file) {
+        const ext = file.name.split('.').pop();
 
-     const fileName = `${uuidv4()}.${ext}`;
-     const newFile = new File([file], fileName, {type: file.type});
-     const cid = await client.put([newFile], {
-         name: fileName,
-     });
-     const imageURI = `https://${cid}.ipfs.dweb.link/${fileName}`;
-     setImage(imageURI);
-    //  const blob = new Blob([JSON.stringify({file:imageURI})], { type: "application/json" });
-    //  const files = [new File([blob], "file.json")];
-    //  setImage(imageURI)
-     return imageURI;
-}
+        const fileName = `${uuidv4()}.${ext}`;
+        const newFile = new File([file], fileName, { type: file.type });
+        const cid = await client.put([newFile], {
+            name: fileName,
+        });
+        const imageURI = `https://${cid}.ipfs.dweb.link/${fileName}`;
+        setImage(imageURI);
+        //  const blob = new Blob([JSON.stringify({file:imageURI})], { type: "application/json" });
+        //  const files = [new File([blob], "file.json")];
+        //  setImage(imageURI)
+        return imageURI;
+    }
 
 
 
-async function storePdfFile(file){
-    const ext = file.name.split('.').pop();
-  
-  const fileName = `${uuidv4()}.${ext}`;
-  const newFile = new File([file], fileName, {type: file.type});
-  const cid = await client.put([newFile], {
-    name: fileName,
-  });
-  const pdfURI = `https://${cid}.ipfs.dweb.link/${fileName}`;
-//   const blob = new Blob([JSON.stringify({file : pdfURI})], { type: "application/json" });
-//   const files = [new File([blob], "pdf.json")];
-  setPdf(pdfURI)
-  
-  return pdfURI;
-  
-   }
-   
+    async function storePdfFile(file) {
+        const ext = file.name.split('.').pop();
+
+        const fileName = `${uuidv4()}.${ext}`;
+        const newFile = new File([file], fileName, { type: file.type });
+        const cid = await client.put([newFile], {
+            name: fileName,
+        });
+        const pdfURI = `https://${cid}.ipfs.dweb.link/${fileName}`;
+        //   const blob = new Blob([JSON.stringify({file : pdfURI})], { type: "application/json" });
+        //   const files = [new File([blob], "pdf.json")];
+        setPdf(pdfURI)
+
+        return pdfURI;
+
+    }
+
     return (
         <BookContext.Provider
             value={{
@@ -152,7 +151,7 @@ async function storePdfFile(file){
                 Image,
                 storePdfFile,
                 pdf,
-                
+
                 // currentUser
                 // fetch
             }}

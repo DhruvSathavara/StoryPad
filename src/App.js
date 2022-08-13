@@ -3,7 +3,6 @@ import logo from './logo.svg';
 import './App.css';
 import Home from './components/Home';
 import UploadForm from './components/UploadForm';
-import BookList from './components/ListingPage/BookList';
 import BookDetail from './components/DetailsPage/BookDetail';
 import DocumentList from './components/ListingPage/DocumentList';
 import NewspaperList from './components/ListingPage/NewspaperList'
@@ -16,6 +15,7 @@ import NewsDetail from './components/DetailsPage/NewsDetail';
 import WebsiteDetail from './components/DetailsPage/WebsiteDetail';
 import Profile from './components/Profile/Profile';
 import UploadFormNft from './components/UploadFormNft';
+import StoryList from './components/ListingPage/StoryList';
 function App() {
   return (
     <div className="App">
@@ -29,7 +29,7 @@ function App() {
   <Route path="/doc-detail/:id" element = { <DocumentDetail /> } />
   <Route path="/news-detail/:id" element = { <NewsDetail /> } />
   <Route path="/web-detail/:id" element = { <WebsiteDetail /> } />
-  <Route path ="/book-list" element = { <BookList />} />
+  <Route path ="/storylist" element = { <StoryList />} />
 <Route path="/documents-list" element = {<DocumentList />} />
 <Route path = "/newspapers-list" element = { <NewspaperList /> } />
 <Route path = "/websites-list" element = { <WebsiteList /> } />
@@ -39,7 +39,6 @@ function App() {
 
 </Routes>
 <Footer />
-      {/* <BookList></BookList> */}
       {/* <BookDetail></BookDetail> */}
     </div>
   );

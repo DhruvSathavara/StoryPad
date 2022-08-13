@@ -10,7 +10,7 @@ const axios = require('axios');
 
 function UploadForm() {
 const {Moralis,account,isAuthenticated} = useMoralis();
-console.log(account);
+localStorage.setItem("currentUserAddress",account);
 
     const [name, setName] = useState('');
     const [ammount, setAmmount] = useState('');
@@ -59,6 +59,7 @@ console.log(account);
         description: description,
         content:content,
         provide:provide,
+        ammount:ammount,
         checkbox: checkbox,
         walletAddress:localStorage.getItem("currentUserAddress")
     }
@@ -134,7 +135,7 @@ const UntoucheDdata  = new untouchedA();
             {provide == "Free" ? (
                 ""
             ) : (
-                <label for="field1"><span>Ammount <span className="required">*</span></span><input value={name} onChange={ammountEvent} placeholder="Matic" type="number" class="input-field" name="field1" /></label>
+                <label for="field1"><span>Ammount <span className="required">*</span></span><input value={ammount} onChange={ammountEvent} placeholder="MATIC" type="number" class="input-field" name="field1" /></label>
             )}
                    
 
