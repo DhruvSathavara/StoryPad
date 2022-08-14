@@ -1,15 +1,50 @@
 import React, { useState, useEffect } from "react";
 import { Web3Storage } from 'web3.storage/dist/bundle.esm.min.js'
-import { useMoralis } from "react-moralis";
+import { useMoralis, useMoralisQuery } from "react-moralis";
 import { BookContext } from "../Context/BookContext";
 import { v4 as uuidv4 } from "uuid";
 import ImageUploading from "react-images-uploading";
 import html2canvas from "html2canvas";
- 
+import ChildContractAbi from "../abi/mintContract.json";
+import { ethers } from "ethers";
+require("dotenv").config({ path: "./.env" });
+
 const axios = require('axios'); 
 
 function UploadForm() {
 const {Moralis,account,isAuthenticated} = useMoralis();
+
+useEffect(() => {
+    const checkBalance = async() =>{
+  
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+  
+      const address = accounts[0];
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const signature = await signer.signMessage(address);
+      const query = new Moralis.Query("storyPadData");
+      // query.equalTo("objectId",id);
+      const object = await query.first();
+  console.log(object.attributes.tokenContractAddress,"result")
+  const tokenAddres = object.attributes.tokenContractAddress;
+      const storyContract = new ethers.Contract(
+        tokenAddres,
+        ChildContractAbi.abi,
+        signer
+      );
+      let balance = await storyContract.balanceOf(accounts[0]);
+      if (balance.toString() !== "0") {
+        console.log("Successfully Signed In as a Member!!");
+   } else {
+     console.log("You are not a member!!");
+   }
+    }
+  checkBalance()
+    }
+    ,[])
 console.log(account);
 
     const [name, setName] = useState('');
@@ -21,8 +56,10 @@ console.log(account);
     const [description, setDescription] = useState('');
     const [content, setContent] = useState('');
     const [checkbox, setCheckbox] = useState();
-    const notify = () => alert("Files are uploaded!");
-
+    const [ NFTHolder, setNFTHolder] = useState("");
+    const [ NotNFTHolder, setNotNFTHolder] = useState("");
+    const [ chargeble, setChargeble ] = useState("");
+    const [ discount, setDiscount ] = useState("");
     const[data, setData] = useState()
 
     const nameEvent = (e) => {
@@ -60,6 +97,8 @@ console.log(account);
         content:content,
         provide:provide,
         checkbox: checkbox,
+        chargeble : chargeble,
+        discount : discount,
         walletAddress:localStorage.getItem("currentUserAddress")
     }
     console.log(Item);
@@ -78,7 +117,8 @@ console.log(localStorage.getItem("currentUserAddress"))
         setContent('');
         setDescription('');
         setCheckbox(null);
-       
+        setChargeble("");
+        setDiscount("");
        
     }
    
@@ -90,8 +130,8 @@ const {addData, storeFiles,storeFile,Image,storePdfFile,pdf} = bookContext;
 
 const API_Token = process.env.REACT_APP_WEB3STORAGE_TOKEN;
 const client = new Web3Storage({ token: API_Token})
-const untouchedA = Moralis.Object.extend("UntouchedArchieve");
-const UntoucheDdata  = new untouchedA();
+
+//Moralis
 
 
     return (
@@ -126,17 +166,52 @@ const UntoucheDdata  = new untouchedA();
 
             <label for="field5"><span>Write content <span className="required">*</span></span><textarea value={content} onChange={contentEvent} name="field5" className="textarea-field-content"></textarea></label>
 
-            <label for="field4"><span>Provide <span className="required">*</span></span><select value={provide} name="field4" onChange={(e)=>setProvide(e.target.value)} className="select-field">
-                        <option defaultChecked defaultValue="Free" value="Free">Free</option>
-                        <option value="Paid">Paid</option>
-                    </select></label>
+          
+            <label for="field4"><span>For not NFT Holder</span><select value={ NFTHolder} name="field4" onChange={(e)=>setNFTHolder(e.target.value)} className="select-field">
+                        <option>Choose an option</option>
+                        <option value="Free">Free</option>
+                        <option value="Chargeble">Chargeble</option>
+                        </select>
+                          { 
+                            NFTHolder == "Chargeble" ? (
+                                
 
-            {provide == "Free" ? (
-                ""
-            ) : (
-                <label for="field1"><span>Ammount <span className="required">*</span></span><input value={name} onChange={ammountEvent} placeholder="Matic" type="number" class="input-field" name="field1" /></label>
-            )}
-                   
+
+            <input
+              value={chargeble}
+              onChange={(e)=>setChargeble(e.target.value)}
+              placeholder="Enter price in matic"
+              type="text"
+              class="input-field"
+              name="field1"
+            />  
+                            
+
+                            ) : ""
+                        }
+                   </label>
+
+                    <label for="field4"><span>For NFT Holder</span><select value={NotNFTHolder } name="field4" onChange={(e)=>setNotNFTHolder(e.target.value)} className="select-field">
+                        <option>Choose an option</option>
+                        <option value="Free">Free</option>
+                        <option value="Discount">Discount price</option>
+                    </select>
+                    { 
+                      NotNFTHolder == "Discount" ? (
+            
+             
+            <input
+              value={discount}
+              onChange={(e)=>setDiscount(e.target.value)}
+              placeholder="Enter price in matic"
+              type="text"
+              class="input-field"
+              name="field1"
+            />  
+
+                            ) : ""
+                        }
+                    </label>         
 
                     <label><input className="terms-checkbox" value={checkbox} onChange={checkboxEvent} type="checkbox"></input>I agree to terms and conditions.</label>
 

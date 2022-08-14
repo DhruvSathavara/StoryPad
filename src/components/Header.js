@@ -22,6 +22,8 @@ function Header() {
           </Link>
         </Typography>
 
+        
+
         <div style={{ display: 'flex', justifyContent: 'end' }}>
           <Link to="upload-form">
             <button className="btn" style={{
@@ -30,6 +32,14 @@ function Header() {
             }}>Write Story</button>
           </Link>
 
+          <Link to="/nft-upload">
+            <button className="btn" style={{
+              backgroundColor: '#D82148', color: 'white',
+              fontWeight: '30px', borderRadius: '7%', padding: "auto",             marginLeft: '10px',
+
+            }}>NFT Readership</button>
+          </Link>
+        
           <button onClick={() => login()} className="btn my-2 my-sm-0" type="submit" style={{
             backgroundColor: '#D82148',
             color: 'white',

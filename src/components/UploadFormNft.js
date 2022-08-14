@@ -4,20 +4,41 @@ import ContractABI from "../abi/mintContractParent.json";
 import { ethers } from "ethers";
 import { Web3Storage } from "web3.storage/dist/bundle.esm.min";
 import { v4 as uuidv4 } from "uuid";
+import { useMoralis, useMoralisQuery } from "react-moralis";
+import { BookContext } from "../Context/BookContext";
+import {  useParams } from 'react-router-dom';
+
+
 require("dotenv").config({ path: "./.env" });
 
-// const currentUser = Moralis.User.current();
-// console.log(currentUser,"current user");
 
-function UploadFormNft() {
-  const pk_1 = process.env.REACT_APP_PRIVATE_KEY;
 
-  //storyPad
+
+
+  function UploadFormNft() {
+    const bookContext = React.useContext(BookContext);
+
+    const { Moralis, isInitialized } = useMoralis();
+    const { id } = useParams()
+      // useEffect(() => {
+      //   Moralis.start({
+      //     appId: "AJQ8A7PGQMX2VUD5YX5PE9DU37DNW2IZIJ",
+      //      serverUrl: "https://fgtqwq1mlljm.usemoralis.com:2053/server",
+      //   })
+      // })
+
+      
+   
+    
+      
+      const storyPad = Moralis.Object.extend("storyPadData");
+      const storypad = new storyPad();
+
+
   const [authorname, setAuthorname] = useState("");
   const [symbol, setSymbol] = useState("");
   const [tokenPrice, setTokenPrice] = useState("");
   const [tokenQuantity, setTokenQuantity] = useState("");
-  const [ noNFT, setNoNFT ] = useState("");
   const API_Token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEIzOEQzNkJhOTIwOWU0NDhCMzZEOGYwNzQ2MzE4ZGFiNmUyNzUwQmYiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTk2ODIzNzc0NDUsIm5hbWUiOiJzdG9yeXBhZCJ9.YBGPQ1JxGs17x5IQ09mPazz85Fv07PK6puQmvhKxHCQ";
   const client = new Web3Storage({ token: API_Token });
@@ -77,113 +98,11 @@ function UploadFormNft() {
     // let tokenContractAddress = event?.address;
     let tokenContractAddress = event.args[1];
     console.log(tokenContractAddress, "TokenContractAddress");
+    storypad.set("tokenContractAddress",tokenContractAddress);
+    storypad.set("CurrentUser", event.args[0])
+    storypad.save();
 
     //IPFS
-    // const images = [
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFKaVAV_JOwMAqEUF5mSU1ax3a70PeREAbSw&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7ckSd1NpjK5Hsb_zx7Pl9Q6fKwxufBU3OOA&usqp=CAU",
-    //     price: 0,
-    //   },
-
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFKaVAV_JOwMAqEUF5mSU1ax3a70PeREAbSw&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7ckSd1NpjK5Hsb_zx7Pl9Q6fKwxufBU3OOA&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTG7DONgkBX5y8PuZSf6EO7UvlKiYHjBqghbg&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVCJuDEcB8OSH8NQgncZWCp_IKdaIPZV-OxA&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFKaVAV_JOwMAqEUF5mSU1ax3a70PeREAbSw&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7ckSd1NpjK5Hsb_zx7Pl9Q6fKwxufBU3OOA&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFKaVAV_JOwMAqEUF5mSU1ax3a70PeREAbSw&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7ckSd1NpjK5Hsb_zx7Pl9Q6fKwxufBU3OOA&usqp=CAU",
-    //     price: 0,
-    //   },
-
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFKaVAV_JOwMAqEUF5mSU1ax3a70PeREAbSw&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7ckSd1NpjK5Hsb_zx7Pl9Q6fKwxufBU3OOA&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTG7DONgkBX5y8PuZSf6EO7UvlKiYHjBqghbg&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVCJuDEcB8OSH8NQgncZWCp_IKdaIPZV-OxA&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFKaVAV_JOwMAqEUF5mSU1ax3a70PeREAbSw&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7ckSd1NpjK5Hsb_zx7Pl9Q6fKwxufBU3OOA&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTG7DONgkBX5y8PuZSf6EO7UvlKiYHjBqghbg&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVCJuDEcB8OSH8NQgncZWCp_IKdaIPZV-OxA&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFKaVAV_JOwMAqEUF5mSU1ax3a70PeREAbSw&usqp=CAU",
-    //     price: 0,
-    //   },
-    //   {
-    //     image:
-    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7ckSd1NpjK5Hsb_zx7Pl9Q6fKwxufBU3OOA&usqp=CAU",
-    //     price: 0,
-    //   },
-    // ];
-
     // images.forEach(function (obj) {
     //    wei = ethers.utils.parseEther(tokenPrice.toString());
     //   obj.price = wei.toString()
@@ -228,7 +147,13 @@ function UploadFormNft() {
  parseInt(tokenPrice)
  
  );
-  }
+ 
+
+}
+
+    
+
+ 
 
   let Item = {
     authorname: authorname,

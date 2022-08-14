@@ -7,6 +7,7 @@ import { MoralisProvider } from 'react-moralis';
 import { BrowserRouter } from 'react-router-dom';
 import { BookContextProvider } from './Context/BookContext';
 
+require("dotenv").config({ path: "./.env" });
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
