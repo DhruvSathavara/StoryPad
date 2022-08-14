@@ -16,6 +16,7 @@ import WebsiteDetail from './components/DetailsPage/WebsiteDetail';
 import Profile from './components/Profile/Profile';
 import UploadFormNft from './components/UploadFormNft';
 import StoryList from './components/ListingPage/StoryList';
+import StoryDetail from './components/DetailsPage/StoryDetail';
 function App() {
   return (
     <div className="App">
@@ -30,6 +31,8 @@ function App() {
   <Route path="/news-detail/:id" element = { <NewsDetail /> } />
   <Route path="/web-detail/:id" element = { <WebsiteDetail /> } />
   <Route path ="/storylist" element = { <StoryList />} />
+  <Route path ="/storydetail" element = { <StoryDetail />} />
+
 <Route path="/documents-list" element = {<DocumentList />} />
 <Route path = "/newspapers-list" element = { <NewspaperList /> } />
 <Route path = "/websites-list" element = { <WebsiteList /> } />

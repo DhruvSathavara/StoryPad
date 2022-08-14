@@ -823,3 +823,25 @@ body {
 .carding :hover{
   margin-top: 1px;
 }
+
+/* ------------------STORY DETAIL PAGE STYLE---------------------- */
+.storyDetailContainer{
+  position: absolute;
+  top: 10%;
+  left: 6%;
+  width: 50%;
+}
+.read-or-hide{
+  color: rgb(14 118 222);
+  cursor: pointer;
+}
+.storyDetailTitle{
+  margin-bottom: -20px;
+}
+.story-detail-img{
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+.story-content{
+  margin-top: 30px;
+}
