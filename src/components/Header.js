@@ -30,12 +30,20 @@ function Header() {
             }}>Write Story</button>
           </Link>
 
+          <Link to="readership-nft">
+            <button className="btn" style={{
+              backgroundColor: '#D82148', color: 'white',
+              fontWeight: '30px', borderRadius: '7%',marginLeft:"7px", padding: "auto"
+            }}>NFT Readership</button>
+          </Link>
+          
           <button onClick={() => login()} className="btn my-2 my-sm-0" type="submit" style={{
             backgroundColor: '#D82148',
             color: 'white',
             fontWeight: '20px',
             border: '2px solid #D82148',
             marginLeft: '10px',
+            height:"38px",
             borderRadius: '7%',
             padding: "auto"
           }}>{isAuthenticated ? "Connected" : "Connect"}</button>

@@ -17,6 +17,8 @@ import Profile from './components/Profile/Profile';
 import UploadFormNft from './components/UploadFormNft';
 import StoryList from './components/ListingPage/StoryList';
 import StoryDetail from './components/DetailsPage/StoryDetail';
+import NftReadership from './components/NftReadership/NftReadershipList';
+import NftReadershipDetail from './components/NftReadershipDetail/NftReadershipDetail';
 function App() {
   return (
     <div className="App">
@@ -32,6 +34,8 @@ function App() {
   <Route path="/web-detail/:id" element = { <WebsiteDetail /> } />
   <Route path ="/storylist" element = { <StoryList />} />
   <Route path ="/storydetail" element = { <StoryDetail />} />
+  <Route path ="/readership-nft" element = { <NftReadership />} />
+  <Route path ="/readership-nft-detail" element = { <NftReadershipDetail />} />
 
 <Route path="/documents-list" element = {<DocumentList />} />
 <Route path = "/newspapers-list" element = { <NewspaperList /> } />

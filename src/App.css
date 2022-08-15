@@ -845,3 +845,84 @@ body {
 .story-content{
   margin-top: 30px;
 }
+
+
+/*-------------------- NFT READERSHIP STYLE------------------ */
+
+.Nft-img{
+  height:150px;
+  width:100%;
+}
+
+.card-readership{
+  transition:0.5s;
+  cursor:pointer;
+  height: 200px;
+}
+.card-title-readership{  
+  font-size:15px;
+  transition:1s;
+  cursor:pointer;
+}
+.card-readership:hover{
+  transform: scale(1.05);
+  box-shadow: 10px 10px 15px rgba(0,0,0,0.3);
+}
+.card-text-readership{
+  height:80px;  
+}
+
+.card-readership::before, .card-readership::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: scale3d(0, 0, 1);
+  transition: transform .3s ease-out 0s;
+  background: rgba(255, 255, 255, 0.1);
+  content: '';
+  pointer-events: none;
+}
+.card-readership::before {
+  transform-origin: left top;
+}
+.card-readership::after {
+  transform-origin: right bottom;
+}
+.card-readership:hover::before, .card-readership:hover::after, .card-readership:focus::before, .card-readership:focus::after {
+  transform: scale3d(1, 1, 1);
+}
+
+/*------------- NFT READERSHIP DETAIL STYLE------------------- */
+
+.card-readership-detail{
+  transition:0.5s;
+  cursor:pointer;
+  height: 250px;
+}
+.card-readership-detail:hover{
+  transform: scale(1.05);
+  box-shadow: 10px 10px 15px rgba(0,0,0,0.3);
+}
+.card-readership-detail::before, .card-readership-detail::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: scale3d(0, 0, 1);
+  transition: transform .3s ease-out 0s;
+  background: rgba(255, 255, 255, 0.1);
+  content: '';
+  pointer-events: none;
+}
+.card-readership-detail::before {
+  transform-origin: left top;
+}
+.card-readership-detail::after {
+  transform-origin: right bottom;
+}
+.card-readership-detail:hover::before, .card-readership-detail:hover::after, .card-readership-detail:focus::before, .card-readership-detail:focus::after {
+  transform: scale3d(1, 1, 1);
+}
