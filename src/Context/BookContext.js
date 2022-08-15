@@ -19,9 +19,9 @@ export const BookContextProvider = (props) => {
     const { data, fetch } = useMoralisQuery("Storylab");
     // console.log(data, ' ====');
     const [NewData, setData] = useState([]);
-    const [bookDetails, setBookDetails] = useState({})
+    const [storyDetails, setStoryDetails] = useState({})
     const API_Token = process.env.REACT_APP_WEB3STORAGE_TOKEN;
-     const client = new Web3Storage({ token: API_Token })
+    const client = new Web3Storage({ token: API_Token })
     const Storypad = Moralis.Object.extend("Storylab");
     const StoryPad = new Storypad();
     const { authenticate, isAuthenticated, isInitialized } = useMoralis()
@@ -76,22 +76,25 @@ export const BookContextProvider = (props) => {
 
 
 
-
-    async function getBookDetails(params) {
+    async function getStoryDetails(params) {
+        console.log("params----------", params);
 
         if (isAuthenticated) {
             const archives = Moralis.Object.extend("Storylab");
             const query = new Moralis.Query(archives);
             query.equalTo("objectId", (params.id).toString());
             const object = await query.first();
-            axios.get(`https://${object.attributes.CID}.ipfs.infura-ipfs.io/data.json`)
+            axios.get(`https://dweb.link/ipfs/${object.attributes.CID}/story.json`)
                 .then(function (response) {
-                    setBookDetails(response.data)
+                    setStoryDetails(response.data)
                 })
                 .catch(function (error) {
+                   
                 })
         }
     }
+
+    console.log('storyDetails contexxx', storyDetails);
 
 
     // ------------MAHIMA'CODE
@@ -110,22 +113,22 @@ export const BookContextProvider = (props) => {
         return imageURI;
     }
 
- 
+
 
     return (
         <BookContext.Provider
             value={{
                 addData,
                 storeFiles,
-                getBookDetails,
+                getStoryDetails,
                 data,
-                bookDetails,
+                storyDetails,
                 login,
                 storeFile,
                 Image,
                 fetch
-                 
-                
+
+
 
             }}
         >

@@ -71,7 +71,7 @@ function Profile() {
                     </div>
                     <div className="badges">
                         <h1 className="profile-name h3"> {user && truncate(user.attributes.ethAddress)}
-                           </h1>
+                        </h1>
                     </div>
                 </header>
             </div>
@@ -81,7 +81,8 @@ function Profile() {
                         <div className="card mb-3 offset-4 cardSec" style={{ maxWidth: "540px", marginTop: "55px", marginBottom: "5rem" }}>
                             <div className="row no-gutters">
                                 <div className="col-md-12 mt-2 mb-2 panel-title">
-                                    <div className="">Story by : {user && truncate(user.attributes.ethAddress)}</div>
+                                    {/* <div className="">Story by : {user && truncate(user.attributes.ethAddress)}</div> */}
+                                    <div className="">Story by : {sData.authorName}</div>
                                 </div>
                                 <div className="col-md-4 works-image">
                                     <img className="card-img" src={sData.coverPicture}></img>
